@@ -18,8 +18,8 @@ public class Sender {
     private final static Logger LOGGER = Logger.getLogger(Sender.class.getName());
 
     public Sender() throws IOException {
-         clientSocket = new DatagramSocket();
-         IPAddress = InetAddress.getByName("localhost");
+         clientSocket = new DatagramSocket(9876);
+         IPAddress = InetAddress.getByName("78.139.9.220");
     }
 
     void start() throws IOException {
