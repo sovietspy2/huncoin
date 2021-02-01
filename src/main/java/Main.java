@@ -15,17 +15,18 @@ public class Main {
     public static void main(String... args) throws IOException, InterruptedException {
 
         final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        DatagramSocket socket = new DatagramSocket(9876);
+        DatagramSocket sendSocket = new DatagramSocket(9876);
+        DatagramSocket receiveSocket = new DatagramSocket(9875);
 
         executorService.scheduleAtFixedRate(() -> {
 
             LOGGER.info("started sending ");
 
             try {
-                byte[] data = "HELL FASZ".getBytes(StandardCharsets.UTF_8);
+                byte[] data = "wrong port".getBytes(StandardCharsets.UTF_8);
 
-                DatagramPacket sendPacket = new DatagramPacket(data, data.length, InetAddress.getByName("78.139.9.220"), 9876);
-                socket.send(sendPacket);
+                DatagramPacket sendPacket = new DatagramPacket(data, data.length, InetAddress.getByName("78.139.9.220"), 9875);
+                sendSocket.send(sendPacket);
 
                 LOGGER.info(" sending finished");
 
@@ -33,7 +34,9 @@ public class Main {
 
                 byte[] receiveData = new byte[1024];
                 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-                socket.receive(receivePacket);
+                receiveSocket.receive(receivePacket);
+
+                LOGGER.info(new String(receivePacket.getData()));
 
                 LOGGER.info("recieved sending ");
 
