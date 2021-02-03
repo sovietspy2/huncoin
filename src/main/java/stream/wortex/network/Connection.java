@@ -1,4 +1,7 @@
+package stream.wortex.network;
+
 import com.google.common.eventbus.EventBus;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -13,28 +16,29 @@ import java.util.concurrent.*;
 
 public class Connection {
 
-    private EventBus eventBus;
+    private final EventBus eventBus;
 
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     private final DatagramSocket serverSocket = new DatagramSocket(9876);
 
-    private List<String> listData = new ArrayList<>();
-
     private final List<String> knownHosts = Arrays.asList("192.168.0.214", "92.249.248.176");
+
+    private final Gson gson = new Gson();
 
     private void receive() throws IOException, ExecutionException, InterruptedException {
         Future<String> data = executorService.submit(new Callable<String>() {
             @Override
             public String call() throws Exception {
                 System.out.println("Waiting for message");
-                byte[] receiveData = new byte[1024]; // important
+                byte[] receiveData = new byte[5000]; // important
                 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 try {
                     serverSocket.receive(receivePacket);
                     //eventBus.post(new String(receiveData));
                     System.out.println("Message received: "+new String(receiveData));
-                    eventBus.post(new MessageEvent("IN",receivePacket.getAddress().toString(), new String(receiveData) ));
+                    Message message = gson.fromJson(new String(receiveData), Message.class);
+                    eventBus.post(message);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -95,11 +99,4 @@ public class Connection {
 
     }
 
-    public List<String> getListData() {
-        return listData;
-    }
-
-    public void setListData(List<String> listData) {
-        this.listData = listData;
-    }
 }

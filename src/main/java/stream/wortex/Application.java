@@ -1,5 +1,7 @@
+package stream.wortex;
+
 import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
+import stream.wortex.network.Connection;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -24,11 +26,13 @@ public class Application {
 
     public void run() throws InterruptedException, IOException, ExecutionException {
 
+
+
         miner.start();
 
         Thread.sleep(2000);
 
-        connection.send("HELL OTHERE ");
+        connection.send("FIRST MESSAGE FASZFEJ");
 
         Thread.sleep(2000);
 

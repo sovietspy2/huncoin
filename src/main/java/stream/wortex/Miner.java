@@ -1,3 +1,5 @@
+package stream.wortex;
+
 public class Miner {
 
     private Thread thread;

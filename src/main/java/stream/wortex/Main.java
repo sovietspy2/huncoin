@@ -1,5 +1,4 @@
-import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
+package stream.wortex;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
